@@ -1,0 +1,184 @@
+<div id = "top_link_list">
+    <div class = "top_link_text">
+        <%= link_to "戻る",articles_path(id:@content),class:"link_text" %>
+     </div>
+</div>
+
+</div>
+<div id = "left_end"></div>
+
+<div id ="center_space">
+    <div id = "content_title_box">
+            <h1><%= @content.article_content_title %></h1>
+    </div>
+    <div id ="content_thumbnail_box">
+        <%= attachment_image_tag @content, :article_content_thumbnail,id:"thumbnail_image" %>
+
+    </div> 
+    <div id ="name_box">
+        著者：<%= @content.article_content_genre %><!--dbの動きがおかしくなっているのでnameとgenruを応急処置で入れ替えている-->
+    </div>
+    
+    <div id="content_comment_box">
+          <%= simple_format(@content.article_content_comment) %>
+    </div>
+    <br>
+    <div id ="genre_box">
+    ジャンル：<%= @content.article_content_name %><!--dbの動きがおかしくなっているのでnameとgenruを応急処置で入れ替えている-->   
+    </div>
+
+    <div class = "line"></div>
+  
+
+    <% @articles.each do |f| %>  
+      <div id="heading_text_box">
+          <%= simple_format(f.article_heading_text,id:"heading_text") %>
+      </div>
+
+
+      <%= simple_format(f.article_top_text) %>
+        <div id ="image_box">
+          <%= attachment_image_tag f, :article_image,id:"image" %>
+        </div >
+        <div>
+      <%= simple_format(f.article_under_text) %>
+    <% end %>
+
+
+    <div class = "line"></div>
+    <div id ="day_put">
+        <%= @content.article_content_day %>
+    </day>
+    <br>
+      
+      
+</div>
+
+<div id = "left_right"></div>
+  
+
+<style>
+#top_link_list{
+  width: 99%;
+  height:8%;
+  background-color: #66623c;
+  position: fixed;
+  top: 0px;
+  margin:auto;
+}
+
+.top_link_text{
+    margin-left:1%;
+    float:left;
+    height:60%;
+    margin-top:1%;
+    font-weight: bold;
+}
+      .link_text{
+      text-decoration: none;
+      color: black;
+      width:100%;
+      white-space: nowrap;
+      color: #fff494;
+    }
+
+#center_space{
+    width:56%;
+    float: left;
+    margin:auto;
+    background-color: #fff494;
+    word-wrap: break-word;
+    margin-top:5%;
+    padding-left:2%;
+    padding-right:2%;
+    padding-bottom:2%;
+    border-radius: 5px;
+}
+
+    #content_title_box{
+      width:98%;
+      background-color: black;
+      color: white;
+      margin:auto;
+      border-radius: 5px;
+      padding-left:1%;
+      padding-right:1%;
+    }
+
+    #content_thumbnail_box{
+      width:90%;
+      height:500px;      
+      margin:auto;
+      text-align:center;      
+    }
+    #thumbnail_image{
+      width:auto;
+      height:auto;
+      max-width:100%;
+      max-height:100%;
+    }
+
+    #content_comment_box{
+      width:90%;
+      margin:auto;
+    }
+    #heading_text_box{
+      color: #fff494;
+      background-color: #66623c;
+      padding-left:1%;
+      padding-right:1%;
+    }
+
+    #image_box{
+      width: 100%;
+      max-height: 300px;      
+      margin:auto;
+      text-align:center;
+    }
+        #image{
+          width: auto;
+          height: 300px;   
+        }
+
+        #day{
+          float:right;
+        }
+    .line{
+        height: 5px;
+        width:100%;
+        background-color:#33311e;
+        color:#33311e;
+    }
+    #day_put{
+      float:right;
+      margin-top:1%;
+      padding-left:1%;
+      padding-right:1%;
+      background-color:#33311e;
+      color:#fff494;
+      border-radius: 5px;
+    }
+        
+#left_end{
+  width:20%;
+  height:650px;     
+  float: left;
+  }
+
+  #right_end{
+    width:20%;
+    height:650px;    
+    float: left;
+    }
+  
+
+
+body{
+    background-color:#ccc376;
+}
+
+
+
+
+
+</style>

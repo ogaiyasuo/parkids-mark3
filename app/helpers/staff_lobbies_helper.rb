@@ -1,0 +1,2 @@
+module StaffLobbiesHelper
+end

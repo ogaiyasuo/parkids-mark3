@@ -1,0 +1,302 @@
+<div class = "body_height_end">
+<div id = "all_area">
+    <div class = "body_end"></div>
+        <div id = "left_area">
+            <div id = "left_block">
+                <div class = "top_under"></div>
+                    <div id = "left_center">             
+                        <div id = "input_block">
+                            <div id ="heading_text">  
+                                <h1> New create content</h1>
+                            </div>
+                                <div id = "input_area">
+                                <div class = "left_text">
+                                記事タイトル
+                                </div>
+                                <input type="text" value="" input maxlength='30'　div id ="input_title"><br>
+                                
+                                    <%= form_for @content, url: contents_create_path, method: :post do |f| %>
+                                        <%= f.text_area :article_content_title,id:"output_title" %>
+                                        <br>
+                                        <div class = "left_text">
+                                        サムネイル画像
+                                        </div>
+                                        <%= f.attachment_field :article_content_thumbnail, placeholder:"サムネイル画像イメージ",id:"input_image" %>
+                                        
+                                        <%= f.submit "作成" %>    
+                                    <% end %>
+                                </div>
+                            </div>
+                        <div id = "content_block_under">
+                        <br>
+                        <%= link_to "　▼フロントページを確認",front_path,class:"link_text" %>                    
+                    </div>       
+                    </div>
+                <div class = "top_under"></div> 
+            </div>
+        </div>
+
+
+    <div id = "right_area">
+    <div class = "right_top_under"></div>
+        <div id = "preview" > 
+                
+            <% @contents.each do |f| %>
+                <div id = "content_block">
+
+                    <%= link_to articles_path(f.id) do %>     
+                        <%= attachment_image_tag f, :article_content_thumbnail,id:"block_thumbnail" %>
+                    <% end %>
+                    <div id = "block_left">
+                        <div id = "block_title">
+                            <%= f.article_content_title %>
+                        </div>
+                        <%= link_to "削除", contents_destroy_path(f.id), method: :delete, "data-confirm" => "本当に削除しますか？",id:"delete_link" %>     
+                </div>
+                </div>
+                         
+            <% end %>
+
+
+        </div>
+    <div class = "right_top_under"></div>    
+    </div>
+    <div class = "body_end"></div>
+</div>
+<div class = "body_height_end">
+
+
+<script>
+
+function get_id(get){
+    
+      var input = 'input_' + get;
+      var input_back = '"' + input + '"';
+      input = document.getElementById( input_back );
+    
+      var output = 'output_' + get;
+      var out_back = '"' + output + '"';
+      output = document.getElementById( out_back );  
+    }
+
+get_id("title");
+
+
+function key_pass(input,output){
+    
+        input.onkeydown = function(){
+            output.textContent = input.value;
+            }
+        input.onkeyup = function(){
+            output.textContent = input.value;
+                    }
+    }
+        
+key_pass(input_title,output_title);
+
+</script>
+
+
+
+
+
+
+
+<style>
+
+body {
+    background-color: #131d33;
+    padding-top: 1%;
+    padding-top: 1%;
+}
+
+.body_end{
+    
+    width:5%;
+    height:100%;     
+    float: left;
+    }
+
+#all_area{
+    height:650px;
+}
+
+
+    #left_area{
+    width:45%;
+    height:100%;
+    float: left; 
+    background-color: #263966;
+    }
+ 
+        #left_block{
+            width:60%;
+            height:100%;     
+            margin: auto;
+                        
+        }
+        .top_under{
+            width:100%;
+            height:15%;     
+            margin: auto;           
+        }
+        #left_center{
+            width:97%;
+            height:70%;     
+            background-color: #4b72cc;
+            padding: 5px;
+            margin: auto;
+            border-radius: 5px;
+            box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+        }
+
+            #input_block{
+                width:95%;
+                height:70%;     
+                background-color: #263966;
+                margin: auto;
+                margin-bottom:5px;
+                padding:5px 5px 5px 5px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+            }
+
+            #heading_text{
+                color: #263966;
+                width:90%;
+                height:40%;
+                background-color: #4b72cc;
+                margin: auto;
+                margin-top:4%;
+                text-align: center;
+                border-radius: 5px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+                overflow:hidden;
+                font-weight: bold;
+            }
+            .left_text{
+                width:50%;
+                color: #263966;
+                font-weight: bold; 
+                text-align: center; 
+                margin-bottom:5px;
+                background-color: #4b72cc;
+                border-radius: 5px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+                overflow:hidden;
+                white-space: nowrap;
+            }
+    
+
+            #input_area{
+                overflow: scroll;
+                width:90%;
+                height:50%;
+                margin: auto;
+                padding: 5% 0px 5% 0px;
+                color: #5e8fff;
+
+            }
+
+            #input_title{
+                color: #131d33;
+                width:99%;
+                font-size: 15px;
+                border-radius: 5px;
+               
+            }
+            #output_title{
+            display: none;
+            }
+            #input_image{
+                
+                width:100%;
+                margin: auto;
+                color: white;
+                display: inline-block
+            }
+
+            #content_block_under{
+                overflow: scroll;
+                width:98%;
+                height:25%;     
+                background-color: #263966;
+                margin: auto;
+                padding: 0px 0px 5px 0px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+                overflow:hidden;
+                white-space: nowrap;
+    
+            }
+
+            .link_text{
+                color: #5e8fff;
+                text-decoration: none;
+            }
+
+
+    #right_area{
+        width:45%;
+        height:100%;
+        float: left;
+        background-color: #395699;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+        }
+
+    .right_top_under{
+        width:100%;
+        height:2%;
+        }
+
+    #preview{  
+        overflow: scroll; 
+        background-color:#131d33;
+        width:96%;
+        height:96%;
+        margin: auto;
+        padding: 2px;
+        border-radius: 5px;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+    }
+    #content_block{
+        background-color: #4b72cc;
+        width:95%;
+        height:200px;
+        margin: 10px;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+        #block_thumbnail{
+            width:30%;
+            height:100%;
+            float: right;
+            border-radius: 5px;
+            box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+            
+        }
+
+        #block_left{
+           
+            text-align: center;
+            width:69%;
+            height:100%;
+            border-radius: 5px;    
+            background-color:#263966;
+            box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+        }
+            #block_title{
+                color:#5e8fff;
+                
+                height:70%;
+                width:97%;
+                padding: 10px 5px 10px 5px;
+                word-wrap: break-word;
+                
+            }
+            #delete_link{
+                text-decoration: none;
+                color: red;
+                width:100%; 
+            }
+            
+</style>   

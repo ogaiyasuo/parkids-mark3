@@ -1,0 +1,643 @@
+<div id = "all_area">
+    <div class = "body_end"></div>
+    <div id = "left_area">
+
+        <div id = "left_link_space">
+        <br>
+        <%= link_to "TOPへ戻る",contents_path,class:"left_link_text" %><br>
+        <%= link_to "前ページへ戻る",articles_path(id:@content),class:"left_link_text" %><br>
+                <%= link_to "プレビュー画面",articles_preview_path(id:@content),class:"left_link_text" %>
+        </div> 
+
+            <div id = "left_block">
+            <div class = "top_under"></div>             
+                <div id = "left_center">
+                    <div id = "input_block">
+
+                    <div id = "print_article"><h1>Article modify</h1></div>
+                    <div id = "content_print_area">
+                        タイトル<br>コメント<br>ジャンル<br>名前<br>作成日時<br>公開許可<br>サムネイル 
+                    </div>
+                    <div id = "content_input_area">
+                        <input type="text"　input maxlength='30' value="" div id ="input_title"><br>
+                        <input type="text" input maxlength='100' value="" div id ="input_comment"><br>
+                        <input type="text"input maxlength='20' value="" div id ="input_genru"><br>
+                        <input type="text"input maxlength='15' value="" div id ="input_name"><br>
+                        <input type="button" input maxlength='30' value = "追加" onClick ="input_day()" div id ="input_time">
+                        <input type="button"  value = "削除" onClick ="delete_day()"><br>
+                        <input type="button"  value = "公開" onClick ="create_permission()" div id ="input_permission">
+                        <input type="button"  value = "非公開" onClick ="delete_permission()"><br>
+    
+
+                     <%= form_for @contents, url: contents_update_path(id:@content) do |f| %>
+                    
+                        <%= f.attachment_field :article_content_thumbnail,id:"input_image" %><br>
+                        <%= f.text_area :article_content_title, id:"output_title" %>
+                        <%= f.text_area :article_content_comment, id:"output_comment" %>
+                        <%= f.text_area :article_content_name, id:"output_genru"%>
+                        <%= f.text_area :article_content_genre, id:"output_name"%>
+                        <%= f.text_area :article_content_day, id:"output_time"%>
+                        <%= f.text_area :article_content_release,id:"output_permission" %>
+                        </div> 
+                        <div id = "submit_button">
+                        <%= f.submit 'セーブ' %>
+                        </div>
+                        
+                    <% end %>
+                
+            </div>
+
+            <div id = "under_input_block">
+                <div id = "under_input_box">
+                    <div class = "under_print"> 見出しテキスト</div>
+                    <textarea id="input_article_heading_text"  wrap="hard" ></textarea>
+                
+
+                <div class = "under_print"> 上段テキスト</div>
+                    <textarea id="input_article_top_text" wrap="hard"></textarea>
+                
+                <div class = "under_print">差し込み画像</div>
+            
+                    <%= form_for @article, url: articles_update_path(id:@article,name:@content) do |f| %>
+
+                        <%= f.text_area :article_heading_text,id:"output_article_heading_text" %>
+                        <%= f.text_area :article_top_text,id:"output_article_top_text" %>
+                        <div id ="input_img_space">
+                            <%= f.attachment_field :article_image, placeholder:"画像イメージ" %>
+                        </div>
+                    <div class = "under_print">下段テキスト</div>
+                            <textarea id="input_article_under_text" wrap="hard"></textarea><br>
+                            <%= f.text_area :article_under_text,id:"output_article_under_text" %>
+                            <div id = "under_submit_button">
+                            <%= f.submit "上書き" %>
+                            </div>
+                            <input type="button"  value = "- space" onClick ="under_space()" div id ="under_space_bottan">
+                            
+                            <% end %>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        <div class = "top_under">
+        </div>    
+        </div>       
+    </div>
+
+
+    <div id = "right_area">
+        <div id ="right_top_area">
+            <div id ="display_title"></div>
+            <div id ="thumbnail_comment">
+                <div id ="thumbnail_point_box">
+                        <%= attachment_image_tag @contents, :article_content_thumbnail,id:"top_thumbnail_image"%>
+                </div>
+                <div id ="display_comment"></div>
+            </div>
+            <div id ="name_genru_area">
+                <div class = "half">                    
+                    <div id ="display_genru_print">ジャンル： </div>             
+                    <div id ="display_genru"></div>
+                </div>                    
+                <div class = "half">    
+                    <div id = "display_name_print">著者：</div>
+                    <div id ="display_name"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id = "preview" >
+            <div id ="preview_center">       
+                <% @articles.each do |f| %>
+                    <div id ="heading_text_box">
+                        <%= simple_format(f.article_heading_text) %>
+                    </div>
+                    <%= simple_format(f.article_top_text) %>
+                    <div id ="block_image_box">
+                        <%= attachment_image_tag f, :article_image,id:"block_image"  %>
+                    </div>
+
+                    <%= simple_format(f.article_under_text) %>                     
+                    <%= link_to "編集",articles_edit_path(f.id,name:@content) %>
+                    <%= link_to "削除",articles_destroy_path(f.id,name:@content), method: :delete, "data-confirm" => "本当に削除しますか？"  %>
+                <% end %>
+            </div>
+        </div>
+        <div id ="right_down_area">
+            <div id ="display_time"></div>
+            <h3> <div id ="display_permission"></div></h3>  
+        </div>
+    </div>
+<div class = "body_end"></div>
+</div>       
+
+
+
+<script>
+//##################################################            
+    function get_id(get){
+        
+        var input = 'input_' + get;
+        var input_back = '"' + input + '"';
+        input = document.getElementById( input_back );
+        
+        var output = 'output_' + get;
+        var out_back = '"' + output + '"';
+        output = document.getElementById( out_back );
+        
+        var display = 'display_' + get;
+        var display_back = '"' + display + '"';
+        display = document.getElementById( display_back );
+        
+        }
+    
+        get_id("title");
+        get_id("comment");
+        get_id("genru");
+        get_id("time");
+        get_id("name");
+        get_id("permission");
+        get_id("article_heading_text");
+        get_id("article_top_text");
+        get_id("article_under_text");
+        
+        
+//##################################################                    
+//##################################################            
+    function key_pass_display(input,output,display){    
+        input.onkeydown = function(){
+          output.textContent = input.value;
+          display.textContent = input.value;
+          console.log(output.textContent); 
+          
+          }
+        input.onkeyup = function(){
+          output.textContent = input.value;
+          display.textContent = input.value;
+                    }
+    }
+    key_pass_display(input_title,output_title,display_title);
+    key_pass_display(input_comment,output_comment,display_comment);
+    key_pass_display(input_genru,output_genru,display_genru);
+    key_pass_display(input_name,output_name,display_name);
+//##################################################                
+    function key_pass(input,output){    
+        input.onkeydown = function(){
+          output.textContent = input.value;
+          console.log(output.textContent); 
+          
+          }
+        input.onkeyup = function(){
+          output.textContent = input.value;
+                    }
+    }
+
+    key_pass(input_article_heading_text,output_article_heading_text);
+    key_pass(input_article_top_text,output_article_top_text);
+    key_pass(input_article_under_text,output_article_under_text);
+    
+
+//##################################################
+//##################################################
+        function input_day(){          
+              var nowTime = new Date();
+              output_time.textContent = nowTime;
+              display_time.textContent = nowTime;
+                         }
+        function delete_day(){
+            output_time.textContent = "";
+            display_time.textContent = "";
+                        }
+//##################################################
+//##################################################
+
+        function create_permission(){
+            output_permission.textContent = "true";
+            display_permission.textContent = "公開中";
+             display_permission.style.backgroundColor = 'red';
+             display_permission.style.color = 'white';
+             display_permission.style.webkitBoxShadow = "5px 5px 5px rgba(0,0,0,0.4) inset";
+        }
+        function delete_permission(){
+            output_permission.textContent = "false";
+            display_permission.textContent = "非公開";
+            display_permission.style.backgroundColor = '#66623c';
+            display_permission.style.color = 'black';
+            display_permission.style.webkitBoxShadow = "5px 5px 5px rgba(0,0,0,0.0)";
+        }
+
+        if(output_permission.textContent == "true"){
+            display_permission.textContent = "公開中";
+            display_permission.style.backgroundColor
+            display_permission.style.backgroundColor = 'red';
+            display_permission.webkitBoxShadow = "5px 5px 5px rgba(0,0,0,0.4)inset";
+        }
+        else{
+            display_permission.textContent = "非公開";
+            display_permission.style.backgroundColor = '#66623c';
+            display_permission.style.color = 'black';
+            display_permission.style.webkitBoxShadow = "0px rgba(0,0,0,0.4)";
+        }
+//##################################################   
+//##################################################
+       input_title.value  = output_title.value;
+       input_comment.value  = output_comment.value;
+       input_genru.value  = output_genru.value;
+       input_title.value  = output_title.value;
+       input_name.value  = output_name.value;
+
+       input_article_heading_text.value  = output_article_heading_text.value;
+       input_article_top_text.value  = output_article_top_text.value;
+       input_article_under_text.value  = output_article_under_text.value;
+       
+       display_title.textContent  = output_title.value;
+       display_comment.textContent  = output_comment.value;
+       display_genru.textContent  = output_genru.value;
+       display_title.textContent  = output_title.value;
+       display_name.textContent  = output_name.value;
+       display_time.textContent  = output_time.value;
+
+ //##################################################
+ //##################################################
+     var under_space_bottan = document.getElementById( "under_space_bottan" );
+     var under_input_block = document.getElementById( "under_input_block" );
+     
+     var space_int = 2;
+
+     function  under_space(){
+        if(space_int < 1){
+            under_space_bottan.value = "- space";
+
+            space_int = 2;
+
+            under_input_block.style.height = '81%';
+            under_input_block.style.top = "-36%";
+            input_article_heading_text.style.height = '2em';
+            input_article_top_text.style.height = "9em";
+            input_article_under_text.style.height = "9em";
+ 
+        } 
+        else{
+            under_space_bottan.value = "+ space";            
+            
+            under_input_block.style.height = '45%';
+            under_input_block.style.top = "0%";
+            input_article_heading_text.style.height = '1em';
+            input_article_top_text.style.height = "1em";
+            input_article_under_text.style.height = "1em";
+            space_int = 0;
+        }
+     }
+ //##################################################     
+ //##################################################
+ //##################################################
+ 
+</script>
+
+
+
+
+<style>
+
+body {
+    background-color: #131d33;
+    padding-top: 1%;
+    padding-top: 1%;
+}
+
+
+
+.body_end{
+    
+    width:5%;
+    height:100%;     
+    float: left;
+    }
+
+#all_area{
+    height:650px; 
+}
+
+    #left_area{
+    width:45%;
+    height:100%;
+    float: left; 
+    background-color: #263966;
+    }
+
+    #left_link_space{
+        width:23%;
+        height:100%;
+        float: left;
+        background-color: #66623c;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+        padding-left: 1%;
+        overflow: hidden;
+    }
+ 
+
+        #left_block{
+            width:62%;
+            height:100%;     
+            margin-left: 25%;
+            }
+
+            .top_under{
+                width:100%;
+                height:5%;     
+                margin: auto;           
+            }
+
+            #left_center{
+                width:97%;
+                height:90%;     
+                background-color: #4b72cc;
+                padding: 5px;
+                margin: auto;
+                border-radius: 5px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+            }
+            #input_block{
+                width:95%;
+                height:50%;     
+                background-color: #263966;
+                margin: auto;
+                margin-bottom:5px;
+                padding:5px 5px 5px 5px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+                white-space: nowrap;
+            }
+
+            #print_article{
+                width:80%;
+                color: #263966; 
+                background-color: #5e8fff;
+                margin: auto;
+                text-align: center;
+                border-radius: 5px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+                                     
+            }
+            #content_print_area{
+                color: #263966;
+                text-align: right;
+                margin-left: 5%;
+                margin-right: 2%;
+                width:25%;
+                font-weight: bold;
+                border-radius: 5px;
+                background-color: #5e8fff;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+                float: left;
+                overflow: hidden;
+                white-space: nowrap;
+            }          
+            #content_input_area{
+                float: left;
+                width:63%;     
+                margin-right: 5%;
+                overflow: hidden;
+            }
+            #input_title{
+                width:100%;
+            }
+            #input_comment{
+                width:100%;
+            }
+            #input_genru{
+                width:100%;
+             }
+            #input_name{
+                width:100%;
+            }
+            #submit_button{
+                float: right;
+                margin-right: 5%;
+            }
+
+            #under_input_block{
+                width:95%;
+                height:81%;     
+                top:-36%;
+                position: relative;  
+                background-color: #66623c;
+                margin: auto;
+                margin-bottom:5px;
+                padding:5px 5px 5px 5px;
+                box-shadow: 5px 5px 5px rgba(0,0,0,0.4);
+                z-index: 1;   
+            }
+            #under_input_box{
+
+                width:90%;
+                margin-bottom:5px;
+                padding:5px 5px 5px 5px;
+                margin-right: 5%;
+                margin-left: 5%;
+                border-radius: 5px;
+                white-space: nowrap;
+                overflow: hidden;
+                z-index: 1;
+            }
+            .under_print{
+                width:50%;
+                font-weight: bold;
+                background-color: #33311e;
+                color: #99935a;
+                text-align: center;
+                z-index: 1;
+                border-radius: 5px;
+            }
+
+            #input_article_heading_text{
+                width:95%;
+                height:2em;
+                margin-bottom:3%;
+                z-index: 1;
+                word-wrap: break-word;
+            }
+            #input_article_top_text{
+                width:95%;
+                height:9em;
+                margin-bottom:3%;
+                z-index: 1;
+                word-wrap: break-word;
+            }
+            #input_img_space{
+                margin-bottom:3%;
+                z-index: 1;
+            }
+            #input_article_under_text{         
+                height:9em;
+                width:95%;
+                z-index: 1;
+                word-wrap: break-word;
+            }
+            #under_submit_button{ 
+                float: right;
+                z-index: 1;
+            }
+
+
+     #right_area{
+        width:45%;
+        height:98%;
+        float: left;
+        background-color: #66623c;
+        padding-top: 1%;
+        padding-top: 1%;
+        border-radius: 5px;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.4) inset;
+       }
+
+    #right_top_area{
+        margin: auto;
+        height:40%;
+        padding-left:2%;
+        padding-right:2%;
+    }
+    #display_title{
+        word-wrap: break-word;
+        margin: auto;
+        text-align: center;
+        background-color: #fff596;
+        border-radius: 5px;
+        borderbottom: 5px;
+    }
+    #thumbnail_comment{
+        height:50%;
+        width:100%;
+        margin-top:2%;
+        margin-bottom:2%;
+    }
+    #display_comment{
+        word-wrap: break-word;
+        background-color: #fff596;
+        border-radius: 5px;
+        height:100%;
+        width:56%;
+        padding-left:2%;
+        padding-right:2%;
+        float:right;
+        overflow: hidden;
+    }
+    .half{
+        width:50%;
+        float:left;
+        overflow: hidden;        
+    }
+        #display_genru_print{
+            float:left;
+        }
+        
+        #display_genru{
+            float:left;
+            width:70%;
+            overflow:hidden;
+            white-space: nowrap;
+        }
+        #display_name_print{
+            float:left;
+        }
+
+        #display_name{
+                float:left;
+                width:70%;
+                overflow:hidden;
+                white-space: nowrap;
+        }
+        #display_time{
+        
+        float:right;
+        }
+        #display_permission{
+            text-align: center;
+            width:4em;
+            border-radius: 5px;
+        }
+
+
+
+    #thumbnail_point_box{
+        height:100%;
+        float:left;
+        width:40%;
+    }
+    #top_thumbnail_image{
+        width:auto;
+        height:auto;
+        max-width:100%;
+        max-height:100%;
+        text-align:center;                              
+    }
+
+   #name_genru_area{
+    height:10%;
+    width:100%;
+    background-color: #fff596;
+   }
+    
+    #right_down_area{
+        width:90%;
+        margin:auto;
+        height:10%;
+        overflow:hidden;
+    }
+     #preview{
+        margin: auto;
+        overflow: scroll; 
+        background-color:#ccc376;
+        width:98%;
+        height:50%;
+
+        }
+        #preview_center{
+            margin: auto;
+            word-wrap: break-word;
+            width:60%;
+            background-color: #fff494;
+            padding-top:1%;
+            padding-left:2%;
+            padding-right:2%;
+
+    
+        }
+          #heading_text_box{
+            color: #fff494;
+            background-color: #66623c;
+            padding-left:1%;
+            padding-right:1%;
+            }
+
+        #block_image_box{
+            width:100%;
+            height:300px;
+            text-align:center; 
+        }
+            #block_image{
+                wwidth:auto;
+                height:auto;
+                max-width:100%;
+                max-height:100%;
+            }
+
+    .left_link_text{
+        text-decoration: none;
+        color: black;
+        width:100%;
+        white-space: nowrap;
+        ;
+    }
+
+#output_title{display:none}
+#output_comment{display:none}
+#output_genru{display:none}
+#output_time{display:none}
+#output_name{display:none}
+#output_permission{display:none}
+
+#output_article_heading_text{display:none}
+#output_article_top_text{display:none}
+#output_article_under_text{display:none}
+
+
+</style>

@@ -1,0 +1,2 @@
+module FrontContentsHelper
+end
